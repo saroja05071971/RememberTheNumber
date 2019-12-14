@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Remember The Number</string>
+    <string name="start_button">Start the Game</string>
+    <string name="stop_button">Pause</string>
+    <string name="strTime">Time Remaining 00:45</string>
+    <string name="welcomeString">Please enter your favorite number between 1 to 10</string>
+    <string name="startString">Start the Game</string>
+    <string name="resultStr">Result</string>
+    <string name="play_button">Play</string>
+    <string name="firstNumber">Favorite Number</string>
+    <string name="randomNumber">Random Number</string>
+    <string name="SecondNumber">Second Number</string>
+    <string name="one_half">0.50</string>
+    <string name="one_third">0.33</string>
+    <string name="one_fourth">0.25</string>
+    <string name="Option1">Option 1</string>
+    <string name="Option2">Option 2</string>
+    <string name="Option3">Option 3</string>
+    <string name="Option4">Option 4</string>
+    <string name="numOfMinutesToPlay">00:30</string>
+    <string name="defaultScore">Score :0</string>
+    <string name="instructionText">Always Remember your previous result</string>
+    <string name="gameOver">Your Game is Over</string>
+    <string name="setTimeMessage">Select the Time</string>
+    <string name="setDifficultyLevelMessage">Select the  Difficulty Level</string>
+</resources>

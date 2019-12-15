@@ -29,14 +29,11 @@ import android.widget.Toast;
 import java.util.Objects;
 import java.util.Random;
 
-/*
-//Add9ng adview api's
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-*/
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -109,6 +106,10 @@ public class PlayActivity_Async extends AppCompatActivity{
     private String difficultyLevel;
 
     private ButtonClick buttonClick;
+    private AdView mAdViewAbove;
+    private AdView mAdViewBelow;
+
+    private String deviceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +119,7 @@ public class PlayActivity_Async extends AppCompatActivity{
         Intent intent = getIntent();
         long timeInMillis = intent.getLongExtra("Time", 30000);
         difficultyLevel = intent.getStringExtra("Difficulty");
+        deviceId = intent.getStringExtra("DeviceId");
         Log.d(TAG, "timeInMillis = " + timeInMillis + " difficultyLevel = " + difficultyLevel);
 
         buttonClick = new ButtonClick();
@@ -128,7 +130,24 @@ public class PlayActivity_Async extends AppCompatActivity{
         optionRestoreHandlerThread.start();
         myCountDownTimer = new MyCountDownTimer(timeInMillis, 1000);
         startAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.blinking_animation);
+        loadAds();
         startGame();
+    }
+
+    private void loadAds() {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        mAdViewAbove = findViewById(R.id.adViewAbove);
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(deviceId).build();
+        mAdViewAbove.loadAd(adRequest);
+
+        mAdViewBelow = findViewById(R.id.adViewBelow);
+        AdRequest adRequestBelow = new AdRequest.Builder().addTestDevice(deviceId).build();
+        mAdViewAbove.loadAd(adRequestBelow);
     }
 
     private void customizeUI() {

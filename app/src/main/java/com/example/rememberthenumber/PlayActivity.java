@@ -232,8 +232,8 @@ public class PlayActivity extends AppCompatActivity implements ExampleDialog.Exa
     }
 
     public void openDialog() {
-        ExampleDialog exampleDialog = new ExampleDialog(myCountDownTimer);
-        exampleDialog.show(getSupportFragmentManager(), "example dialog");
+        //ExampleDialog exampleDialog = new ExampleDialog(myCountDownTimer);
+        //exampleDialog.show(getSupportFragmentManager(), "example dialog");
     }
 
     @Override

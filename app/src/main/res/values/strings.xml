@@ -4,7 +4,7 @@
     <string name="stop_button">Pause</string>
     <string name="strTime">Time Remaining 00:45</string>
     <string name="welcomeString">Please enter your favorite number between 1 to 10</string>
-    <string name="startString">Start the Game</string>
+    <string name="shareString">Share your Score with your friends</string>
     <string name="resultStr">Result</string>
     <string name="play_button">Play</string>
     <string name="firstNumber">Favorite Number</string>
@@ -18,9 +18,10 @@
     <string name="Option3">Option 3</string>
     <string name="Option4">Option 4</string>
     <string name="numOfMinutesToPlay">00:30</string>
-    <string name="defaultScore">Score :0</string>
+    <string name="defaultScore">Score : 0</string>
     <string name="instructionText">Always Remember your previous result</string>
     <string name="gameOver">Your Game is Over</string>
     <string name="setTimeMessage">Select the Time</string>
     <string name="setDifficultyLevelMessage">Select the  Difficulty Level</string>
+    <string name="defaultBestScore">Best Score : 0</string>
 </resources>

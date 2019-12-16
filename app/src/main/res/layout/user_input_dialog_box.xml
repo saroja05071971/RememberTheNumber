@@ -6,15 +6,16 @@
 
     <TextView
         android:id="@+id/welcomeText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/startString"
+        android:text="@string/shareString"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
-
+    <!--
     <EditText
         android:id="@+id/userInputDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/welcomeString"
-        android:inputType="numberDecimal"/>
+        android:inputType="numberDecimal"/
+        -->
 </LinearLayout>

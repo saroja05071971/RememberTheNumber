@@ -6,6 +6,7 @@ import androidx.core.app.ShareCompat;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -40,7 +41,7 @@ import static java.lang.Boolean.TRUE;
 import static java.lang.Boolean.compare;
 import static java.lang.Thread.sleep;
 
-public class PlayActivity_Async extends AppCompatActivity{
+public class PlayActivity_Async extends AppCompatActivity implements ExampleDialog.ExampleDialogListener{
 
     MyCountDownTimer myCountDownTimer;
     private Context context = this;
@@ -55,7 +56,7 @@ public class PlayActivity_Async extends AppCompatActivity{
     private int num2 = 0;
     private boolean counter;
     private boolean mStopLoop;
-    private static final String TAG = "PlayActivity";
+    private static final String TAG = "PlayActivity_Async";
 
     private Button option_1;
     private Button option_2;
@@ -69,6 +70,7 @@ public class PlayActivity_Async extends AppCompatActivity{
     private int optionCorrect;
     private int score;
     private TextView tvScore;
+    private TextView tvBestScore;
 
     private Toast timeOver;
     private Toast rightAnswerAsToast;
@@ -93,6 +95,7 @@ public class PlayActivity_Async extends AppCompatActivity{
     private int yOffSet = 20;
 
     private long timeToSleep;
+    private long timeInMillis;
 
     ColorStateList timeTextOrigColor;
     ColorStateList optionsOrigColor;
@@ -111,13 +114,25 @@ public class PlayActivity_Async extends AppCompatActivity{
 
     private String deviceId;
 
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String bestScore_0030 = "bestScore0030";
+    public static final String bestScore_0045 = "bestScore0045";
+    public static final String bestScore_0100 = "bestScore0100";
+    public static final String bestScore_0130 = "bestScore0130";
+    public static final String bestScore_0200 = "bestScore0200";
+    public static final String bestScore_0300 = "bestScore0300";
+    public static final String bestScore_0500 = "bestScore0500";
+
+    private int bestScore;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
         Intent intent = getIntent();
-        long timeInMillis = intent.getLongExtra("Time", 30000);
+        timeInMillis = intent.getLongExtra("Time", 30000);
         difficultyLevel = intent.getStringExtra("Difficulty");
         deviceId = intent.getStringExtra("DeviceId");
         Log.d(TAG, "timeInMillis = " + timeInMillis + " difficultyLevel = " + difficultyLevel);
@@ -141,13 +156,13 @@ public class PlayActivity_Async extends AppCompatActivity{
             }
         });
 
-        mAdViewAbove = findViewById(R.id.adViewAbove);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(deviceId).build();
-        mAdViewAbove.loadAd(adRequest);
+        //mAdViewAbove = findViewById(R.id.adViewAbove);
+        //AdRequest adRequest = new AdRequest.Builder().addTestDevice(deviceId).build();
+        //mAdViewAbove.loadAd(adRequest);
 
         mAdViewBelow = findViewById(R.id.adViewBelow);
         AdRequest adRequestBelow = new AdRequest.Builder().addTestDevice(deviceId).build();
-        mAdViewAbove.loadAd(adRequestBelow);
+        mAdViewBelow.loadAd(adRequestBelow);
     }
 
     private void customizeUI() {
@@ -205,6 +220,8 @@ public class PlayActivity_Async extends AppCompatActivity{
         option_4.setOnClickListener(buttonClick);
         optionsOrigColor = option_4.getTextColors();
         tvScore = findViewById(R.id.tvScore);
+        tvBestScore = findViewById(R.id.tvBestScore);
+        loadBestScore();
         r = new Random();
         tvInstruction = findViewById(R.id.tvInstruction);
         modifyExpressionVisibility(FALSE);
@@ -212,8 +229,8 @@ public class PlayActivity_Async extends AppCompatActivity{
         timeOver = Toast.makeText(context, "Time's Up", Toast.LENGTH_LONG);
         LinearLayout toastLayout = (LinearLayout) timeOver.getView();
         TextView toastTV = (TextView) toastLayout.getChildAt(0);
-        toastTV.setTextSize(30);
-        timeOver.setGravity(Gravity.CENTER, 0, 0);
+        toastTV.setTextSize(20);
+        //timeOver.setGravity(Gravity.CENTER, 0, 0);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -222,11 +239,54 @@ public class PlayActivity_Async extends AppCompatActivity{
         Log.d(TAG, "yOffSet = " + yOffSet);
         rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
 
-        timeToSleepAfterChangingColor = 300;
         timeToSleepBeforeChangingOption = 250;
         timeToSleep = 350;
         optionLayout = findViewById(R.id.optionLayout);
         numberToHide = -1;
+    }
+
+    private void loadBestScore() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        if(timeInMillis==30000) {
+            bestScore = sharedPreferences.getInt(bestScore_0030, 0);
+        }else if(timeInMillis==45000) {
+            bestScore = sharedPreferences.getInt(bestScore_0045, 0);
+        }else if(timeInMillis==60000) {
+            bestScore = sharedPreferences.getInt(bestScore_0100, 0);
+        }else if(timeInMillis==90000) {
+            bestScore = sharedPreferences.getInt(bestScore_0130, 0);
+        }else if(timeInMillis==120000) {
+            bestScore = sharedPreferences.getInt(bestScore_0200, 0);
+        }else if(timeInMillis==180000) {
+            bestScore = sharedPreferences.getInt(bestScore_0300, 0);
+        }else if(timeInMillis==300000) {
+            bestScore = sharedPreferences.getInt(bestScore_0500, 0);
+        }
+        tvBestScore.setText("Best Score : "+bestScore);
+
+    }
+
+    private void updateBestScore() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if(timeInMillis==30000) {
+            editor.putInt(bestScore_0030, score);
+        }else if(timeInMillis==45000){
+            editor.putInt(bestScore_0045, score);
+        }else if(timeInMillis==60000){
+            editor.putInt(bestScore_0100, score);
+        }else if(timeInMillis==90000){
+            editor.putInt(bestScore_0130, score);
+        }else if(timeInMillis==120000){
+            editor.putInt(bestScore_0200, score);
+        }else if(timeInMillis==180000){
+            editor.putInt(bestScore_0300, score);
+        }else if(timeInMillis==300000){
+            editor.putInt(bestScore_0500, score);
+        }
+        editor.apply();
+
+        loadBestScore();
     }
 
     public void startGame() {
@@ -239,7 +299,7 @@ public class PlayActivity_Async extends AppCompatActivity{
             modifyOptionLayoutVisibilityVisibility(TRUE);
             myCountDownTimer.start();
             restoreOptionsOrigColor();
-            tvInstruction.setVisibility(View.INVISIBLE);
+            //tvInstruction.setVisibility(View.INVISIBLE);
             modifyExpressionVisibility(TRUE);
             executeOnCustoLooperWithCustomHandlerFirstTime();
         }
@@ -436,35 +496,43 @@ public class PlayActivity_Async extends AppCompatActivity{
                     correctOptionColor(correctResult, TRUE);
                     changeOptionColor(option_1, FALSE);
                     //rightAnswerAsToast.show();
-                    rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
-                    rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
+                    //rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
+                    //rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
                     //rightAnswerAsToast.getView().getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+                    rightAnswerAsToast.setText("Correct Answer is "+result);
                     rightAnswerAsToast.show();
                 } else if (optionClickedNumber == 2) {
                     correctOptionColor(correctResult, TRUE);
                     changeOptionColor(option_2, FALSE);
-                    rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
-                    rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
+                    //rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
+                    //rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
                     //rightAnswerAsToast.getView().getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+                    rightAnswerAsToast.setText("Correct Answer is "+result);
                     rightAnswerAsToast.show();
                 } else if (optionClickedNumber == 3) {
                     correctOptionColor(correctResult, TRUE);
                     changeOptionColor(option_3, FALSE);
-                    rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
-                    rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
+                    //rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
+                    //rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
                     //rightAnswerAsToast.getView().getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+                    rightAnswerAsToast.setText("Correct Answer is "+result);
                     rightAnswerAsToast.show();
                 } else if (optionClickedNumber == 4) {
                     correctOptionColor(correctResult, TRUE);
                     changeOptionColor(option_4, FALSE);
-                    rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
-                    rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
+                    //rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
+                    //rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
                     //rightAnswerAsToast.getView().getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+                    rightAnswerAsToast.setText("Correct Answer is "+result);
                     rightAnswerAsToast.show();
                 }
                 try {
                     sleep(timeToSleep);
                     restoreOptionsOrigColor();
+                    if(rightAnswerAsToast!=null && rightAnswerAsToast.getView().isShown()){
+                        rightAnswerAsToast.cancel();
+                    }
+                    enableOptions();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -569,7 +637,7 @@ public class PlayActivity_Async extends AppCompatActivity{
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.option1:
-                    //disableOptions();
+                    disableOptions();
                     optionClickedNumber = 1;
                     if (ismStopLoop() == TRUE) {
                         optionSelected = TRUE;
@@ -581,7 +649,7 @@ public class PlayActivity_Async extends AppCompatActivity{
                             }
                         }
                         executeScoreAndOptionUpdation();
-                        tvScore.setText("Score :" + score);
+                        tvScore.setText("Score : " + score);
                         sleepForSomeTime(timeToSleepBeforeChangingOption);
                         executeOnCustoLooperWithCustomHandler();
                         while (TRUE) {
@@ -597,7 +665,7 @@ public class PlayActivity_Async extends AppCompatActivity{
                     break;
 
                 case R.id.option2:
-                    //disableOptions();
+                    disableOptions();
                     optionClickedNumber = 2;
                     if (ismStopLoop() == TRUE) {
                         optionSelected = TRUE;
@@ -609,7 +677,7 @@ public class PlayActivity_Async extends AppCompatActivity{
                             }
                         }
                         executeScoreAndOptionUpdation();
-                        tvScore.setText("Score :" + score);
+                        tvScore.setText("Score : " + score);
                         sleepForSomeTime(timeToSleepBeforeChangingOption);
                         executeOnCustoLooperWithCustomHandler();
                         while (TRUE) {
@@ -625,7 +693,7 @@ public class PlayActivity_Async extends AppCompatActivity{
                     break;
 
                 case R.id.option3:
-                    //disableOptions();
+                    disableOptions();
                     optionClickedNumber = 3;
                     if (ismStopLoop() == TRUE) {
                         optionSelected = TRUE;
@@ -637,7 +705,7 @@ public class PlayActivity_Async extends AppCompatActivity{
                             }
                         }
                         executeScoreAndOptionUpdation();
-                        tvScore.setText("Score :" + score);
+                        tvScore.setText("Score : " + score);
                         sleepForSomeTime(timeToSleepBeforeChangingOption);
                         executeOnCustoLooperWithCustomHandler();
                         while (TRUE) {
@@ -652,7 +720,7 @@ public class PlayActivity_Async extends AppCompatActivity{
                     //enableOptions();
                     break;
                 case R.id.option4:
-                    //disableOptions();
+                    disableOptions();
                     optionClickedNumber = 4;
                     if (ismStopLoop() == TRUE) {
                         optionSelected = TRUE;
@@ -665,7 +733,7 @@ public class PlayActivity_Async extends AppCompatActivity{
                             changeOptionColor(option_4, FALSE);
                         }
                         executeScoreAndOptionUpdation();
-                        tvScore.setText("Score :" + score);
+                        tvScore.setText("Score : " + score);
                         sleepForSomeTime(timeToSleepBeforeChangingOption);
                         executeOnCustoLooperWithCustomHandler();
                         while (TRUE) {
@@ -707,18 +775,25 @@ public class PlayActivity_Async extends AppCompatActivity{
         public void onFinish() {
             optionSelected=FALSE;
             setmStopLoop(FALSE);
-            tvInstruction.setVisibility(View.VISIBLE);
-            tvScore.setText("Final Score :"+score);
+            //tvInstruction.setVisibility(View.VISIBLE);
+            tvScore.setText("Final Score : "+score);
+            modifyBestScore();
             //modifyOptionsText();
             timeTextView.setTextColor(timeTextOrigColor);
             stopAnimation();
             modifyOptionLayoutVisibilityVisibility(FALSE);
             modifyExpressionVisibility(FALSE);
-            rightAnswerAsToast.cancel();
             timeOver.show();
+            openDialog();
             //String textToShare = "I have scored "+score+"in Remember the Number "+"https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";;
             //shareText(textToShare);
 
+        }
+    }
+
+    private void modifyBestScore() {
+        if(score > bestScore){
+            updateBestScore();
         }
     }
 
@@ -774,4 +849,16 @@ public class PlayActivity_Async extends AppCompatActivity{
         option_3.setClickable(TRUE);
         option_4.setClickable(TRUE);
     }
+
+    public void openDialog() {
+        ExampleDialog exampleDialog = new ExampleDialog(myCountDownTimer,score);
+        exampleDialog.show(getSupportFragmentManager(), "example dialog");
+    }
+
+    @Override
+    public void applyTexts(String inputVal) {
+        Log.e("MainActivity", "inputVal = " + inputVal);
+        //setNum1(Integer.parseInt(inputVal));
+    }
+
 }

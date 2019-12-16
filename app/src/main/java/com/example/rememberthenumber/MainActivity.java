@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("DeviceId",device_id);
 
         startActivity(intent);
+        //finish();
     }
 
     private long convertInMillis(String timeSelected) {

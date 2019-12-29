@@ -8,6 +8,8 @@
         android:id="@+id/welcomeText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:gravity="center"
         android:text="@string/shareString"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
     <!--

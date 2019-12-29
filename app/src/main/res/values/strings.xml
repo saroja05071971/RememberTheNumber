@@ -9,6 +9,7 @@
     <string name="play_button">Play</string>
     <string name="firstNumber">Favorite Number</string>
     <string name="randomNumber">Random Number</string>
+    <string name="previousResult">Previous\nResult</string>
     <string name="SecondNumber">Second Number</string>
     <string name="one_half">0.50</string>
     <string name="one_third">0.33</string>

@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:screenOrientation="portrait"
+    android:background="@color/colorPrimary"
     android:gravity="center">
 
     <!--
@@ -21,6 +22,7 @@
             android:layout_height="wrap_content"
             android:text="@string/instructionText"
             android:gravity="center"
+            android:background="@android:color/holo_green_light"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColorHighlight="@color/colorAccent"
             android:textSize="24sp" />
@@ -45,6 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:background="@android:color/holo_green_light"
             android:prompt="@string/setTimeMessage">
         </Spinner>
     </LinearLayout>
@@ -67,6 +70,7 @@
         android:id="@+id/difficultySpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/holo_green_light"
         android:prompt="@string/setDifficultyLevelMessage">
     </Spinner>
     </LinearLayout>
@@ -101,7 +105,7 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            ads:adSize="BANNER"
+            ads:adSize="SMART_BANNER"
             ads:adUnitId="ca-app-pub-9513425877498158/8554177019">
         </com.google.android.gms.ads.AdView>
     </LinearLayout>

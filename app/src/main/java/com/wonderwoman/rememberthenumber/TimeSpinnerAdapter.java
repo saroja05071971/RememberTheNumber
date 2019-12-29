@@ -1,4 +1,4 @@
-package com.example.rememberthenumber;
+package com.wonderwoman.rememberthenumber;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,14 +10,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class DifficultySpinnerAdapter extends ArrayAdapter<String> {
-    private Context context;
-    private String[] difficultyLevels;
+public class TimeSpinnerAdapter extends ArrayAdapter<String> {
 
-    public DifficultySpinnerAdapter(Context context, int resource,String[] objects) {
+    private Context context;
+    private String[] timeValues;
+
+    public TimeSpinnerAdapter(Context context, int resource,String[] objects) {
         super(context, resource, objects);
         this.context=context;
-        this.difficultyLevels=objects;
+        this.timeValues=objects;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class DifficultySpinnerAdapter extends ArrayAdapter<String> {
         View row = inflater.inflate(R.layout.difficulty_spinner_value,parent,false);
 
         TextView textView = row.findViewById(R.id.difficultyLevel);
-        textView.setText(difficultyLevels[position]);
+        textView.setText(timeValues[position]);
         return row;
     }
 }

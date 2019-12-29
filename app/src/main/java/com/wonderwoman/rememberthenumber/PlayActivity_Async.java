@@ -1,20 +1,16 @@
-package com.example.rememberthenumber;
+package com.wonderwoman.rememberthenumber;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ShareCompat;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Objects;
 import java.util.Random;
 
 import com.google.android.gms.ads.AdRequest;
@@ -38,7 +33,6 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
-import static java.lang.Boolean.compare;
 import static java.lang.Thread.sleep;
 
 public class PlayActivity_Async extends AppCompatActivity implements ExampleDialog.ExampleDialogListener{
@@ -136,6 +130,7 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
         difficultyLevel = intent.getStringExtra("Difficulty");
         deviceId = intent.getStringExtra("DeviceId");
         Log.d(TAG, "timeInMillis = " + timeInMillis + " difficultyLevel = " + difficultyLevel);
+        Log.d(TAG,"Sachin device_id = "+deviceId);
 
         buttonClick = new ButtonClick();
         initUI();
@@ -161,7 +156,9 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
         //mAdViewAbove.loadAd(adRequest);
 
         mAdViewBelow = findViewById(R.id.adViewBelow);
-        AdRequest adRequestBelow = new AdRequest.Builder().addTestDevice(deviceId).build();
+        AdRequest adRequestBelow = new AdRequest.Builder().build();
+        //AdRequest adRequestBelow = new AdRequest.Builder().addTestDevice("3B8CADE63BC3E3BA6E2E4CF988C726AB").build();
+        if(mAdViewBelow!=null)
         mAdViewBelow.loadAd(adRequestBelow);
     }
 
@@ -184,8 +181,8 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         if (customHandlerThread != null) {
             customHandlerThread.getLooper().quit();
             Log.d(TAG, "customHandlerThread is cancelled");
@@ -202,6 +199,41 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
             optionRestoreHandlerThread.getLooper().quit();
             Log.d(TAG, "optionRestoreHandlerThread is cancelled");
         }
+
+        if(startAnimation != null){
+            startAnimation.cancel();
+            Log.d(TAG, "startAnimation is cancelled");
+        }
+        restoreOptionsOrigColor();
+        optionSelected=FALSE;
+        setmStopLoop(FALSE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        /*
+        if (customHandlerThread != null) {
+            customHandlerThread.getLooper().quit();
+            Log.d(TAG, "customHandlerThread is cancelled");
+        }
+        if (myCountDownTimer != null) {
+            myCountDownTimer.cancel();
+            Log.d(TAG, "myCountDownTimer is cancelled");
+        }
+        if (rightAnswerAsToast != null) {
+            rightAnswerAsToast.cancel();
+            Log.d(TAG, "rightAnswerAsToast is cancelled");
+        }
+        if (optionRestoreHandlerThread != null) {
+            optionRestoreHandlerThread.getLooper().quit();
+            Log.d(TAG, "optionRestoreHandlerThread is cancelled");
+        }
+
+        if(startAnimation != null){
+            startAnimation.cancel();
+            Log.d(TAG, "startAnimation is cancelled");
+        }*/
     }
 
     private void initUI() {
@@ -239,8 +271,8 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
         Log.d(TAG, "yOffSet = " + yOffSet);
         rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
 
-        timeToSleepBeforeChangingOption = 250;
-        timeToSleep = 350;
+        timeToSleepBeforeChangingOption = 150;
+        timeToSleep = 250;
         optionLayout = findViewById(R.id.optionLayout);
         numberToHide = -1;
     }
@@ -491,39 +523,39 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
             @Override
             public void run() {
                 if (optionClickedNumber == correctResult) {
-                    correctOptionColor(correctResult, TRUE);
+                    //correctOptionColor(correctResult, TRUE);
                 } else if (optionClickedNumber == 1) {
-                    correctOptionColor(correctResult, TRUE);
-                    changeOptionColor(option_1, FALSE);
+                    //correctOptionColor(correctResult, TRUE);
+                    //changeOptionColor(option_1, FALSE);
                     //rightAnswerAsToast.show();
                     //rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
-                    //rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
+                    rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
                     //rightAnswerAsToast.getView().getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
-                    rightAnswerAsToast.setText("Correct Answer is "+result);
+                    //rightAnswerAsToast.setText("Correct Answer is "+result);
                     rightAnswerAsToast.show();
                 } else if (optionClickedNumber == 2) {
-                    correctOptionColor(correctResult, TRUE);
-                    changeOptionColor(option_2, FALSE);
+                    //correctOptionColor(correctResult, TRUE);
+                    //changeOptionColor(option_2, FALSE);
                     //rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
-                    //rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
+                    rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
                     //rightAnswerAsToast.getView().getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
-                    rightAnswerAsToast.setText("Correct Answer is "+result);
+                    //rightAnswerAsToast.setText("Correct Answer is "+result);
                     rightAnswerAsToast.show();
                 } else if (optionClickedNumber == 3) {
-                    correctOptionColor(correctResult, TRUE);
-                    changeOptionColor(option_3, FALSE);
+                    //correctOptionColor(correctResult, TRUE);
+                    //changeOptionColor(option_3, FALSE);
                     //rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
-                    //rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
+                    rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
                     //rightAnswerAsToast.getView().getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
-                    rightAnswerAsToast.setText("Correct Answer is "+result);
+                    //rightAnswerAsToast.setText("Correct Answer is "+result);
                     rightAnswerAsToast.show();
                 } else if (optionClickedNumber == 4) {
-                    correctOptionColor(correctResult, TRUE);
-                    changeOptionColor(option_4, FALSE);
+                    //correctOptionColor(correctResult, TRUE);
+                    //changeOptionColor(option_4, FALSE);
                     //rightAnswerAsToast.setGravity(Gravity.CENTER, 0, yOffSet);
-                    //rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
+                    rightAnswerAsToast = Toast.makeText(context, "Correct Answer is " + result, Toast.LENGTH_SHORT);
                     //rightAnswerAsToast.getView().getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
-                    rightAnswerAsToast.setText("Correct Answer is "+result);
+                    //rightAnswerAsToast.setText("Correct Answer is "+result);
                     rightAnswerAsToast.show();
                 }
                 try {
@@ -532,7 +564,7 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
                     if(rightAnswerAsToast!=null && rightAnswerAsToast.getView().isShown()){
                         rightAnswerAsToast.cancel();
                     }
-                    enableOptions();
+                    //enableOptions();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -608,13 +640,15 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
                         @Override
                         public void run() {
                             if (numberToHide == 1) {
-                                tvNum1.setVisibility(View.INVISIBLE);
-                                tvNum2.setVisibility(View.VISIBLE);
+                                //tvNum1.setVisibility(View.INVISIBLE);
+                                //tvNum2.setVisibility(View.VISIBLE);
                                 tvNum2.setText(String.valueOf(num2));
+                                tvNum1.setText(R.string.previousResult);
                             } else if (numberToHide == 2) {
-                                tvNum1.setVisibility(View.VISIBLE);
-                                tvNum2.setVisibility(View.INVISIBLE);
+                                //tvNum1.setVisibility(View.VISIBLE);
+                                //tvNum2.setVisibility(View.VISIBLE);
                                 tvNum1.setText(String.valueOf(num1));
+                                tvNum2.setText(R.string.previousResult);
                             }
                             if (operator == 1) {
                                 tvOperator.setText("+");
@@ -648,20 +682,23 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
                                 score -= 1;
                             }
                         }
-                        executeScoreAndOptionUpdation();
-                        tvScore.setText("Score : " + score);
-                        sleepForSomeTime(timeToSleepBeforeChangingOption);
-                        executeOnCustoLooperWithCustomHandler();
-                        while (TRUE) {
-                            if (optionSelected == TRUE) {
-                                updateUI();
-                                break;
-                            }
+                        synchronized (this) {
+                            executeScoreAndOptionUpdation();
+                            tvScore.setText("Score : " + score);
+                            sleepForSomeTime(timeToSleepBeforeChangingOption);
+                            executeOnCustoLooperWithCustomHandler();
+                            /*
+                            while (TRUE) {
+                                if (optionSelected == TRUE) {
+                                    updateUI();
+                                    break;
+                                }
+                            }*/
+                            enableOptions();
                         }
                     } else {
                         optionSelected = FALSE;
                     }
-                    //enableOptions();
                     break;
 
                 case R.id.option2:
@@ -676,20 +713,23 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
                                 score -= 1;
                             }
                         }
-                        executeScoreAndOptionUpdation();
-                        tvScore.setText("Score : " + score);
-                        sleepForSomeTime(timeToSleepBeforeChangingOption);
-                        executeOnCustoLooperWithCustomHandler();
-                        while (TRUE) {
-                            if (optionSelected == TRUE) {
-                                updateUI();
-                                break;
-                            }
+                        synchronized (this) {
+                            executeScoreAndOptionUpdation();
+                            tvScore.setText("Score : " + score);
+                            sleepForSomeTime(timeToSleepBeforeChangingOption);
+                            executeOnCustoLooperWithCustomHandler();
+                            /*
+                            while (TRUE) {
+                                if (optionSelected == TRUE) {
+                                    updateUI();
+                                    break;
+                                }
+                            }*/
+                            enableOptions();
                         }
                     } else {
                         optionSelected = FALSE;
                     }
-                    //enableOptions();
                     break;
 
                 case R.id.option3:
@@ -704,20 +744,23 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
                                 score -= 1;
                             }
                         }
-                        executeScoreAndOptionUpdation();
-                        tvScore.setText("Score : " + score);
-                        sleepForSomeTime(timeToSleepBeforeChangingOption);
-                        executeOnCustoLooperWithCustomHandler();
-                        while (TRUE) {
-                            if (optionSelected == TRUE) {
-                                updateUI();
-                                break;
-                            }
+                        synchronized (this) {
+                            executeScoreAndOptionUpdation();
+                            tvScore.setText("Score : " + score);
+                            sleepForSomeTime(timeToSleepBeforeChangingOption);
+                            executeOnCustoLooperWithCustomHandler();
+                            /*
+                            while (TRUE) {
+                                if (optionSelected == TRUE) {
+                                    updateUI();
+                                    break;
+                                }
+                            }*/
+                            enableOptions();
                         }
                     } else {
                         optionSelected = FALSE;
                     }
-                    //enableOptions();
                     break;
                 case R.id.option4:
                     disableOptions();
@@ -730,22 +773,24 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
                             if (score > 0) {
                                 score -= 1;
                             }
-                            changeOptionColor(option_4, FALSE);
                         }
-                        executeScoreAndOptionUpdation();
-                        tvScore.setText("Score : " + score);
-                        sleepForSomeTime(timeToSleepBeforeChangingOption);
-                        executeOnCustoLooperWithCustomHandler();
-                        while (TRUE) {
-                            if (optionSelected == TRUE) {
-                                updateUI();
-                                break;
-                            }
+                        synchronized (this) {
+                            executeScoreAndOptionUpdation();
+                            tvScore.setText("Score : " + score);
+                            sleepForSomeTime(timeToSleepBeforeChangingOption);
+                            executeOnCustoLooperWithCustomHandler();
+                            /*
+                            while (TRUE) {
+                                if (optionSelected == TRUE) {
+                                    updateUI();
+                                    break;
+                                }
+                            }*/
+                            enableOptions();
                         }
                     } else {
                         optionSelected = FALSE;
                     }
-                    //enableOptions();
                     break;
             }
         }
@@ -775,14 +820,17 @@ public class PlayActivity_Async extends AppCompatActivity implements ExampleDial
         public void onFinish() {
             optionSelected=FALSE;
             setmStopLoop(FALSE);
+            disableOptions();
             //tvInstruction.setVisibility(View.VISIBLE);
             tvScore.setText("Final Score : "+score);
             modifyBestScore();
             //modifyOptionsText();
             timeTextView.setTextColor(timeTextOrigColor);
             stopAnimation();
-            modifyOptionLayoutVisibilityVisibility(FALSE);
-            modifyExpressionVisibility(FALSE);
+            synchronized(this) {
+                modifyExpressionVisibility(FALSE);
+                modifyOptionLayoutVisibilityVisibility(FALSE);
+            }
             timeOver.show();
             openDialog();
             //String textToShare = "I have scored "+score+"in Remember the Number "+"https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n\n";;

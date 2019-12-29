@@ -1,9 +1,7 @@
-package com.example.rememberthenumber;
+package com.wonderwoman.rememberthenumber;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -18,8 +16,6 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,15 +49,17 @@ public class MainActivity extends AppCompatActivity {
 
         timeSpinner.setAdapter(timeSpinnerAdapter);
         difficultySpinner.setAdapter(difficultySpinnerAdapter);
-
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
         device_id = getDeviceId();
+        Log.d(TAG,"Sachin device_id = "+device_id);
         mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(device_id).build();
+        AdRequest adRequest = new AdRequest.Builder().build();
+        //AdRequest adRequest = new AdRequest.Builder().addTestDevice("3B8CADE63BC3E3BA6E2E4CF988C726AB").build();
+        if(mAdView!=null)
         mAdView.loadAd(adRequest);
     }
 

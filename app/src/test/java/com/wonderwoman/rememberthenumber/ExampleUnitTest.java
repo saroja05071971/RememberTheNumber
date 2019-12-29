@@ -1,4 +1,4 @@
-package com.example.rememberthenumber;
+package com.wonderwoman.rememberthenumber;
 
 import org.junit.Test;
 

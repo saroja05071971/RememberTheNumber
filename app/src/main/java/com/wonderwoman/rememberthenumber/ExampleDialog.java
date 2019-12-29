@@ -1,11 +1,10 @@
-package com.example.rememberthenumber;
+package com.wonderwoman.rememberthenumber;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +13,6 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.core.app.ShareCompat;
-
-import java.util.Objects;
-
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 
 public class ExampleDialog extends AppCompatDialogFragment {
     private EditText userInputVal;

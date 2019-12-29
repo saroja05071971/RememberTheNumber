@@ -1,15 +1,12 @@
-package com.example.rememberthenumber;
+package com.wonderwoman.rememberthenumber;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ShareCompat;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -26,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Objects;
 import java.util.Random;
 
 /*
@@ -40,7 +36,6 @@ import com.google.android.gms.ads.AdView;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
-import static java.lang.Boolean.compare;
 import static java.lang.Thread.sleep;
 
 public class PlayActivity extends AppCompatActivity implements ExampleDialog.ExampleDialogListener {
@@ -181,6 +176,7 @@ public class PlayActivity extends AppCompatActivity implements ExampleDialog.Exa
         tvNum1 = findViewById(R.id.num1_text);
         tvNum2 = findViewById(R.id.num2_text);
         tvOperator = findViewById(R.id.operator_text);
+
         timeTextView = findViewById(R.id.timeTextView);
         timeTextOrigColor = timeTextView.getTextColors();
         option_1 = findViewById(R.id.option1);
